@@ -504,45 +504,6 @@ describe("The operator", function()
 		end)
 	end)
 
-	describe("fold", function()
-		it("is called exactly once for every iteration", function()
-			local t = {1, 2, 3}
-			local target = 3
-
-			local function f(state, i, v)
-				return state + 1
-			end
-
-			local output = genny.fold(genny.ipairs(t), 0, f)
-			assert.is.equal(target, output)
-		end)
-
-		it("is called in iteration order", function()
-			local t = {1, 2, 3}
-			local target = t
-
-			local function f(state, i, v)
-				table.insert(state, v)
-				return state
-			end
-
-			local output = genny.fold(genny.ipairs(t), {}, f)
-			assert.is.same(target, output)
-		end)
-
-		it("receives all values", function()
-			local t = {1, 2, 3}
-			local target = 12
-
-			local function f(state, i, v)
-				return state + i + v
-			end
-
-			local output = genny.fold(genny.ipairs(t), 0, f)
-			assert.is.equal(target, output)
-		end)
-	end)
-
 	describe("discard", function()
 		it("can discard no return values", function()
 			local t = {4, 5, 6}
@@ -720,6 +681,45 @@ describe("The collector", function()
 			local target = {"aaa", "aa"}
 			local output = genny.dictionary(genny.enumerate(genny.gmatch(s, "a+")))
 			assert.is.same(target, output)
+		end)
+	end)
+
+	describe("fold", function()
+		it("is called exactly once for every iteration", function()
+			local t = {1, 2, 3}
+			local target = 3
+
+			local function f(state, i, v)
+				return state + 1
+			end
+
+			local output = genny.fold(genny.ipairs(t), 0, f)
+			assert.is.equal(target, output)
+		end)
+
+		it("is called in iteration order", function()
+			local t = {1, 2, 3}
+			local target = t
+
+			local function f(state, i, v)
+				table.insert(state, v)
+				return state
+			end
+
+			local output = genny.fold(genny.ipairs(t), {}, f)
+			assert.is.same(target, output)
+		end)
+
+		it("receives all values", function()
+			local t = {1, 2, 3}
+			local target = 12
+
+			local function f(state, i, v)
+				return state + i + v
+			end
+
+			local output = genny.fold(genny.ipairs(t), 0, f)
+			assert.is.equal(target, output)
 		end)
 	end)
 end)
