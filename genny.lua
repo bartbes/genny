@@ -1,0 +1,214 @@
+local _LICENSE = -- zlib / libpng
+[[
+Copyright (c) 2017 Bart van Strien
+
+This software is provided 'as-is', without any express or implied
+warranty. In no event will the authors be held liable for any damages
+arising from the use of this software.
+
+Permission is granted to anyone to use this software for any purpose,
+including commercial applications, and to alter it and redistribute it
+freely, subject to the following restrictions:
+
+  1. The origin of this software must not be misrepresented; you must not
+  claim that you wrote the original software. If you use this software
+  in a product, an acknowledgment in the product documentation would be
+  appreciated but is not required.
+
+  2. Altered source versions must be plainly marked as such, and must not be
+  misrepresented as being the original software.
+
+  3. This notice may not be removed or altered from any source
+  distribution.
+]]
+
+local genny =
+{
+	_VERSION = "1.0",
+	_DESCRIPTION = "Genny enhances lua iterators",
+	_URL = "https://github.com/bartbes/genny",
+	_LICENSE = _LICENSE,
+}
+
+-- A generator is a lua iterator that takes no arguments
+
+---- Generator ----
+-- Turns a lua iterator into a generator
+function genny.generator(it, state, init)
+	return function()
+		-- NOTE: If the iterator has more than 26(!) return values, they will be discarded
+		local a, b, c, d, e, f, g, h, u, j, k, l, m, n, o, p, q, r, s, t, u, v, w, x, y, z = it(state, init)
+		init = a
+		return a, b, c, d, e, f, g, h, u, j, k, l, m, n, o, p, q, r, s, t, u, v, w, x, y, z
+	end
+end
+
+---- Standard generators ----
+function genny.ipairs(t)
+	return genny.generator(ipairs(t))
+end
+
+function genny.pairs(t)
+	return genny.generator(pairs(t))
+end
+
+local function rangeit(to, prev)
+	prev = prev + 1
+	if prev > to then
+		prev = nil
+	end
+	return prev
+end
+
+-- All numbers from from up to and including to
+function genny.range(from, to)
+	if not to then
+		from, to = 1, from
+	end
+	return genny.generator(rangeit, to, from-1)
+end
+
+function genny.gmatch(string, pattern)
+	return genny.generator(string:gmatch(pattern))
+end
+
+-- String split
+function genny.split(string, split, plain, empty)
+	if empty == nil then
+		empty = true
+	end
+	local from = 1
+	local len = #string
+	return function()
+		if from > len then return nil end
+		local to, next = string:find(split, from, plain)
+		if not to then to, next = len+1, len end
+		while from == to and not empty do
+			from = next+1
+			if from > len then return nil end
+			to, next = string:find(split, from, plain)
+			if not to then to, next = len+1, len end
+		end
+		local sub = string:sub(from, to-1)
+		from = next+1
+		return sub
+	end
+end
+
+---- Combinators ----
+-- First return the values from first, then from second, etc
+function genny.join(first, ...)
+	local gens = {first, ...}
+	local cur = 1
+	return function()
+		local a, b, c, d, e, f, g, h, u, j, k, l, m, n, o, p, q, r, s, t, u, v, w, x, y, z = gens[cur]()
+		while not a do
+			cur = cur + 1
+			if cur > #gens then return nil end
+			a, b, c, d, e, f, g, h, u, j, k, l, m, n, o, p, q, r, s, t, u, v, w, x, y, z = gens[cur]()
+		end
+		return a, b, c, d, e, f, g, h, u, j, k, l, m, n, o, p, q, r, s, t, u, v, w, x, y, z
+	end
+end
+
+-- Add a counter to each key, so ['a', 'b', 'c'] becomes [(1, 'a'), (2, 'b'), (3, 'c')]
+function genny.enumerate(gen)
+	local counter = 0
+	return function()
+		counter = counter + 1
+		local a, b, c, d, e, f, g, h, u, j, k, l, m, n, o, p, q, r, s, t, u, v, w, x, y, z = gen()
+		if a then
+			return counter, a, b, c, d, e, f, g, h, u, j, k, l, m, n, o, p, q, r, s, t, u, v, w, x, y, z
+		end
+	end
+end
+
+---- Operators ----
+-- Applies f to every value
+function genny.map(gen, func)
+	return function()
+		local a, b, c, d, e, f, g, h, u, j, k, l, m, n, o, p, q, r, s, t, u, v, w, x, y, z = gen()
+		if a then
+			return func(a, b, c, d, e, f, g, h, u, j, k, l, m, n, o, p, q, r, s, t, u, v, w, x, y, z)
+		end
+	end
+end
+
+-- Skips value if f applied to it returns false/nil
+function genny.filter(gen, func)
+	return function()
+		local a, b, c, d, e, f, g, h, u, j, k, l, m, n, o, p, q, r, s, t, u, v, w, x, y, z = gen()
+		if not a then return nil end
+		while not func(a, b, c, d, e, f, g, h, u, j, k, l, m, n, o, p, q, r, s, t, u, v, w, x, y, z) do
+			a, b, c, d, e, f, g, h, u, j, k, l, m, n, o, p, q, r, s, t, u, v, w, x, y, z = gen()
+			if not a then return nil end
+		end
+		return a, b, c, d, e, f, g, h, u, j, k, l, m, n, o, p, q, r, s, t, u, v, w, x, y, z
+	end
+end
+
+-- f(state, ...) -> state
+function genny.fold(gen, init, func)
+	local a, b, c, d, e, f, g, h, u, j, k, l, m, n, o, p, q, r, s, t, u, v, w, x, y, z = gen()
+	local state = init
+	while a do
+		state = func(state, a, b, c, d, e, f, g, h, u, j, k, l, m, n, o, p, q, r, s, t, u, v, w, x, y, z)
+		a, b, c, d, e, f, g, h, u, j, k, l, m, n, o, p, q, r, s, t, u, v, w, x, y, z = gen()
+	end
+	return state
+end
+
+-- Discard the first elements keys returned (useful for ipairs)
+function genny.discard(g, elements)
+	elements = elements or 1
+	return function()
+		return select(elements+1, g())
+	end
+end
+
+-- Collect all return values into a table
+function genny.tablify(g)
+	return function()
+		local ret = {g()}
+		if not ret[1] then return nil end
+		return ret
+	end
+end
+
+---- Collectors ----
+-- Collect into a sequence [a, b, c] -> {a, b, c}
+function genny.sequence(g)
+	local out = {}
+	for elem in g do
+		out[#out+1] = elem
+	end
+	return out
+end
+
+-- Collect into a dictionary [(ka, va), (kb, vb)] -> {[ka] = va, [kb] = vb}
+function genny.dictionary(g)
+	local out = {}
+	for k, v in g do
+		out[k] = v
+	end
+	return out
+end
+
+---- Utilities ----
+local chain_mt = {
+	__call = function(self)
+		return self.gen()
+	end,
+
+	next = function(self, func, ...)
+		self.gen = func(self.gen, ...)
+		return self
+	end,
+}
+chain_mt.__index = chain_mt
+
+function genny.chain(g)
+	return setmetatable({gen = g}, chain_mt)
+end
+
+return genny
