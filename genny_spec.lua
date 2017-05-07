@@ -296,25 +296,25 @@ describe("The combinator", function()
 		end)
 	end)
 
-	describe("zip", function()
+	describe("roundrobin", function()
 		it("is the identity with one iterator", function()
 			local t = {1, 2, 3}
 			local target = {1, 2, 3}
 			local output = {}
 
-			for i, v in genny.zip(genny.ipairs(t)) do
+			for i, v in genny.roundrobin(genny.ipairs(t)) do
 				table.insert(output, v)
 			end
 
 			assert.are.same(target, output)
 		end)
 
-		it("can zip two generators", function()
+		it("can roundrobin two generators", function()
 			local t = {1, 2, 3}
 			local target = {1, 1, 2, 2, 3, 3}
 			local output = {}
 
-			for i, v in genny.zip(genny.ipairs(t), genny.ipairs(t)) do
+			for i, v in genny.roundrobin(genny.ipairs(t), genny.ipairs(t)) do
 				table.insert(output, v)
 			end
 
@@ -327,7 +327,7 @@ describe("The combinator", function()
 			local target = {1, "aaa", 1, 2, "aa", 2, 3}
 			local output = {}
 
-			for i, v in genny.zip(genny.ipairs(t), genny.gmatch(s, "a+"), genny.ipairs(t)) do
+			for i, v in genny.roundrobin(genny.ipairs(t), genny.gmatch(s, "a+"), genny.ipairs(t)) do
 				-- Note: I'm using i since gmatch only returns one element
 				table.insert(output, i)
 			end

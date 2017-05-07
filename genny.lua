@@ -133,7 +133,7 @@ function genny.enumerate(gen)
 end
 
 -- Round-robin iterations from the first, second, etc generators
-function genny.zip(first, ...)
+function genny.roundrobin(first, ...)
 	local gens = {first, ...}
 	local cur = 0
 	local num = #gens
