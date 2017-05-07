@@ -189,6 +189,32 @@ describe("The standard generator", function()
 			assert.are.same({"1", "2", "3", "4"}, split_output)
 		end)
 	end)
+
+	describe("once", function()
+		it("returns the exact value given", function()
+			local value = {}
+			local target = value
+			local output = nil
+
+			for v in genny.once(value) do
+				output = v
+			end
+
+			assert.are.equal(target, output)
+		end)
+
+		it("return the value exactly once", function()
+			local value = 15
+			local target = {15}
+			local output = {}
+
+			for v in genny.once(value) do
+				table.insert(output, v)
+			end
+
+			assert.are.same(target, output)
+		end)
+	end)
 end)
 
 describe("The combinator", function()

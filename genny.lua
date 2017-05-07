@@ -95,6 +95,15 @@ function genny.split(string, split, plain, empty)
 	end
 end
 
+-- Return the given value exactly once
+function genny.once(value)
+	return function()
+		local v = value
+		value = nil
+		return v
+	end
+end
+
 ---- Combinators ----
 -- First return all values from first, then from second, etc
 function genny.join(first, ...)
