@@ -37,9 +37,9 @@ local genny =
 function genny.generator(it, state, init)
 	return function()
 		-- NOTE: If the iterator has more than 26(!) return values, they will be discarded
-		local a, b, c, d, e, f, g, h, u, j, k, l, m, n, o, p, q, r, s, t, u, v, w, x, y, z = it(state, init)
+		local a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t, u, v, w, x, y, z = it(state, init)
 		init = a
-		return a, b, c, d, e, f, g, h, u, j, k, l, m, n, o, p, q, r, s, t, u, v, w, x, y, z
+		return a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t, u, v, w, x, y, z
 	end
 end
 
@@ -101,13 +101,13 @@ function genny.join(first, ...)
 	local gens = {first, ...}
 	local cur = 1
 	return function()
-		local a, b, c, d, e, f, g, h, u, j, k, l, m, n, o, p, q, r, s, t, u, v, w, x, y, z = gens[cur]()
+		local a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t, u, v, w, x, y, z = gens[cur]()
 		while not a do
 			cur = cur + 1
 			if cur > #gens then return nil end
-			a, b, c, d, e, f, g, h, u, j, k, l, m, n, o, p, q, r, s, t, u, v, w, x, y, z = gens[cur]()
+			a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t, u, v, w, x, y, z = gens[cur]()
 		end
-		return a, b, c, d, e, f, g, h, u, j, k, l, m, n, o, p, q, r, s, t, u, v, w, x, y, z
+		return a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t, u, v, w, x, y, z
 	end
 end
 
@@ -116,9 +116,9 @@ function genny.enumerate(gen)
 	local counter = 0
 	return function()
 		counter = counter + 1
-		local a, b, c, d, e, f, g, h, u, j, k, l, m, n, o, p, q, r, s, t, u, v, w, x, y, z = gen()
+		local a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t, u, v, w, x, y, z = gen()
 		if a then
-			return counter, a, b, c, d, e, f, g, h, u, j, k, l, m, n, o, p, q, r, s, t, u, v, w, x, y, z
+			return counter, a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t, u, v, w, x, y, z
 		end
 	end
 end
@@ -127,9 +127,9 @@ end
 -- Applies f to every value
 function genny.map(gen, func)
 	return function()
-		local a, b, c, d, e, f, g, h, u, j, k, l, m, n, o, p, q, r, s, t, u, v, w, x, y, z = gen()
+		local a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t, u, v, w, x, y, z = gen()
 		if a then
-			return func(a, b, c, d, e, f, g, h, u, j, k, l, m, n, o, p, q, r, s, t, u, v, w, x, y, z)
+			return func(a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t, u, v, w, x, y, z)
 		end
 	end
 end
@@ -137,23 +137,23 @@ end
 -- Skips value if f applied to it returns false/nil
 function genny.filter(gen, func)
 	return function()
-		local a, b, c, d, e, f, g, h, u, j, k, l, m, n, o, p, q, r, s, t, u, v, w, x, y, z = gen()
+		local a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t, u, v, w, x, y, z = gen()
 		if not a then return nil end
-		while not func(a, b, c, d, e, f, g, h, u, j, k, l, m, n, o, p, q, r, s, t, u, v, w, x, y, z) do
-			a, b, c, d, e, f, g, h, u, j, k, l, m, n, o, p, q, r, s, t, u, v, w, x, y, z = gen()
+		while not func(a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t, u, v, w, x, y, z) do
+			a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t, u, v, w, x, y, z = gen()
 			if not a then return nil end
 		end
-		return a, b, c, d, e, f, g, h, u, j, k, l, m, n, o, p, q, r, s, t, u, v, w, x, y, z
+		return a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t, u, v, w, x, y, z
 	end
 end
 
 -- f(state, ...) -> state
 function genny.fold(gen, init, func)
-	local a, b, c, d, e, f, g, h, u, j, k, l, m, n, o, p, q, r, s, t, u, v, w, x, y, z = gen()
+	local a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t, u, v, w, x, y, z = gen()
 	local state = init
 	while a do
-		state = func(state, a, b, c, d, e, f, g, h, u, j, k, l, m, n, o, p, q, r, s, t, u, v, w, x, y, z)
-		a, b, c, d, e, f, g, h, u, j, k, l, m, n, o, p, q, r, s, t, u, v, w, x, y, z = gen()
+		state = func(state, a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t, u, v, w, x, y, z)
+		a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t, u, v, w, x, y, z = gen()
 	end
 	return state
 end
