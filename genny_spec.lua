@@ -258,44 +258,6 @@ describe("The combinator", function()
 		end)
 	end)
 
-	describe("enumerate", function()
-		it("prefixes every iteration with an iteration number", function()
-			local s = "abc"
-			local target = {{1, "a"}, {2, "b"}, {3, "c"}}
-			local output = {}
-
-			for i, v in genny.enumerate(genny.gmatch(s, ".")) do
-				table.insert(output, {i, v})
-			end
-
-			assert.are.same(target, output)
-		end)
-
-		it("works across joins", function()
-			local s = "abc"
-			local target = {{1, "a"}, {2, "b"}, {3, "c"}, {4, "a"}, {5, "b"}, {6, "c"}}
-			local output = {}
-
-			for i, v in genny.enumerate(genny.join(genny.gmatch(s, "."), genny.gmatch(s, "."))) do
-				table.insert(output, {i, v})
-			end
-
-			assert.are.same(target, output)
-		end)
-
-		it("works inside joins", function()
-			local s = "abc"
-			local target = {{1, "a"}, {2, "b"}, {3, "c"}, {1, "a"}, {2, "b"}, {3, "c"}}
-			local output = {}
-
-			for i, v in genny.join(genny.enumerate(genny.gmatch(s, ".")), genny.enumerate(genny.gmatch(s, "."))) do
-				table.insert(output, {i, v})
-			end
-
-			assert.are.same(target, output)
-		end)
-	end)
-
 	describe("roundrobin", function()
 		it("is the identity with one iterator", function()
 			local t = {1, 2, 3}
@@ -338,6 +300,44 @@ describe("The combinator", function()
 end)
 
 describe("The operator", function()
+	describe("enumerate", function()
+		it("prefixes every iteration with an iteration number", function()
+			local s = "abc"
+			local target = {{1, "a"}, {2, "b"}, {3, "c"}}
+			local output = {}
+
+			for i, v in genny.enumerate(genny.gmatch(s, ".")) do
+				table.insert(output, {i, v})
+			end
+
+			assert.are.same(target, output)
+		end)
+
+		it("works across joins", function()
+			local s = "abc"
+			local target = {{1, "a"}, {2, "b"}, {3, "c"}, {4, "a"}, {5, "b"}, {6, "c"}}
+			local output = {}
+
+			for i, v in genny.enumerate(genny.join(genny.gmatch(s, "."), genny.gmatch(s, "."))) do
+				table.insert(output, {i, v})
+			end
+
+			assert.are.same(target, output)
+		end)
+
+		it("works inside joins", function()
+			local s = "abc"
+			local target = {{1, "a"}, {2, "b"}, {3, "c"}, {1, "a"}, {2, "b"}, {3, "c"}}
+			local output = {}
+
+			for i, v in genny.join(genny.enumerate(genny.gmatch(s, ".")), genny.enumerate(genny.gmatch(s, "."))) do
+				table.insert(output, {i, v})
+			end
+
+			assert.are.same(target, output)
+		end)
+	end)
+
 	describe("map", function()
 		it("calls the mapper exactly once for every element", function()
 			local t = {1, 2, 3}

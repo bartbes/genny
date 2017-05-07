@@ -120,18 +120,6 @@ function genny.join(first, ...)
 	end
 end
 
--- Add a counter to each key, so ['a', 'b', 'c'] becomes [(1, 'a'), (2, 'b'), (3, 'c')]
-function genny.enumerate(gen)
-	local counter = 0
-	return function()
-		counter = counter + 1
-		local a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t, u, v, w, x, y, z = gen()
-		if a then
-			return counter, a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t, u, v, w, x, y, z
-		end
-	end
-end
-
 -- Round-robin iterations from the first, second, etc generators
 function genny.roundrobin(first, ...)
 	local gens = {first, ...}
@@ -144,6 +132,18 @@ function genny.roundrobin(first, ...)
 end
 
 ---- Operators ----
+-- Add a counter to each key, so ['a', 'b', 'c'] becomes [(1, 'a'), (2, 'b'), (3, 'c')]
+function genny.enumerate(gen)
+	local counter = 0
+	return function()
+		counter = counter + 1
+		local a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t, u, v, w, x, y, z = gen()
+		if a then
+			return counter, a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t, u, v, w, x, y, z
+		end
+	end
+end
+
 -- Applies f to every value
 function genny.map(gen, func)
 	return function()
