@@ -193,6 +193,18 @@ end)
 
 describe("The combinator", function()
 	describe("join", function()
+		it("is the identity with one iterator", function()
+			local t = {1, 2, 3}
+			local target = {1, 2, 3}
+			local output = {}
+
+			for i, v in genny.join(genny.ipairs(t)) do
+				table.insert(output, v)
+			end
+
+			assert.are.same(target, output)
+		end)
+
 		it("can join two generators", function()
 			local t = {1, 2, 3}
 			local target = {1, 2, 3, 1, 2, 3}
@@ -252,6 +264,46 @@ describe("The combinator", function()
 
 			for i, v in genny.join(genny.enumerate(genny.gmatch(s, ".")), genny.enumerate(genny.gmatch(s, "."))) do
 				table.insert(output, {i, v})
+			end
+
+			assert.are.same(target, output)
+		end)
+	end)
+
+	describe("zip", function()
+		it("is the identity with one iterator", function()
+			local t = {1, 2, 3}
+			local target = {1, 2, 3}
+			local output = {}
+
+			for i, v in genny.zip(genny.ipairs(t)) do
+				table.insert(output, v)
+			end
+
+			assert.are.same(target, output)
+		end)
+
+		it("can zip two generators", function()
+			local t = {1, 2, 3}
+			local target = {1, 1, 2, 2, 3, 3}
+			local output = {}
+
+			for i, v in genny.zip(genny.ipairs(t), genny.ipairs(t)) do
+				table.insert(output, v)
+			end
+
+			assert.are.same(target, output)
+		end)
+
+		it("can join three generators", function()
+			local t = {1, 2, 3}
+			local s = "aaabaa"
+			local target = {1, "aaa", 1, 2, "aa", 2, 3}
+			local output = {}
+
+			for i, v in genny.zip(genny.ipairs(t), genny.gmatch(s, "a+"), genny.ipairs(t)) do
+				-- Note: I'm using i since gmatch only returns one element
+				table.insert(output, i)
 			end
 
 			assert.are.same(target, output)

@@ -96,7 +96,7 @@ function genny.split(string, split, plain, empty)
 end
 
 ---- Combinators ----
--- First return the values from first, then from second, etc
+-- First return all values from first, then from second, etc
 function genny.join(first, ...)
 	local gens = {first, ...}
 	local cur = 1
@@ -120,6 +120,17 @@ function genny.enumerate(gen)
 		if a then
 			return counter, a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t, u, v, w, x, y, z
 		end
+	end
+end
+
+-- Round-robin iterations from the first, second, etc generators
+function genny.zip(first, ...)
+	local gens = {first, ...}
+	local cur = 0
+	local num = #gens
+	return function()
+		cur = (cur % num) + 1
+		return gens[cur]()
 	end
 end
 
