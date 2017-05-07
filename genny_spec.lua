@@ -562,6 +562,37 @@ describe("The operator", function()
 			assert.is.same(target, output)
 		end)
 	end)
+
+	describe("when", function()
+		it("returns elements until func returns false", function()
+			local t = {1, 2, 3, 4, 5}
+			local target = {1, 2, 3}
+			local output = {}
+
+			local function f(i, v)
+				return v ~= 4
+			end
+
+			for i, v in genny.when(genny.ipairs(t), f) do
+				table.insert(output, v)
+			end
+
+			assert.is.same(target, output)
+
+			local target = {1, 2, 3, 4, 5}
+			local output = {}
+
+			local function f(i, v)
+				return v ~= 7
+			end
+
+			for i, v in genny.when(genny.ipairs(t), f) do
+				table.insert(output, v)
+			end
+
+			assert.is.same(target, output)
+		end)
+	end)
 end)
 
 describe("The collector", function()

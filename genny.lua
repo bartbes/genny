@@ -186,6 +186,17 @@ function genny.take(gen, max)
 	end
 end
 
+-- Take elements until 'func' returns false
+function genny.when(gen, func)
+	return function()
+		local a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t, u, v, w, x, y, z = gen()
+		if not a or not func(a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t, u, v, w, x, y, z) then
+			return nil
+		end
+		return a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t, u, v, w, x, y, z
+	end
+end
+
 ---- Collectors ----
 -- Collect into a sequence [a, b, c] -> {a, b, c}
 function genny.sequence(g)
