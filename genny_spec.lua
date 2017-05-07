@@ -96,6 +96,17 @@ describe("The standard generator", function()
 			end
 			assert.is.equal(ran, 1)
 		end)
+
+		it("has an optional from argument", function()
+			local target = {1, 2, 3, 4, 5}
+			local output = {}
+
+			for n in genny.range(5) do
+				table.insert(output, n)
+			end
+
+			assert.are.same(target, output)
+		end)
 	end)
 
 	describe("gmatch", function()
