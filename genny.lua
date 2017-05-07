@@ -175,6 +175,17 @@ function genny.tablify(g)
 	end
 end
 
+-- Take at most n elements
+function genny.take(gen, max)
+	local count = 0
+	return function()
+		count = count + 1
+		if count <= max then
+			return gen()
+		end
+	end
+end
+
 ---- Collectors ----
 -- Collect into a sequence [a, b, c] -> {a, b, c}
 function genny.sequence(g)

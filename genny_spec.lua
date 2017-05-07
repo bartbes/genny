@@ -539,6 +539,29 @@ describe("The operator", function()
 			assert.is.same(target, output)
 		end)
 	end)
+
+	describe("take", function()
+		it("returns at most n elements", function()
+			local t = {1, 2, 3, 4, 5}
+			local target = {1, 2, 3}
+			local output = {}
+
+			for i, v in genny.take(genny.ipairs(t), 3) do
+				table.insert(output, v)
+			end
+
+			assert.is.same(target, output)
+
+			local t = {1, 2, 3}
+			local output = {}
+
+			for i, v in genny.take(genny.ipairs(t), 5) do
+				table.insert(output, v)
+			end
+
+			assert.is.same(target, output)
+		end)
+	end)
 end)
 
 describe("The collector", function()
