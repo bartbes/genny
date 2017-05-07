@@ -6,5 +6,7 @@ Genny defines so-called "generators", which nothing but lua iterators that don't
 Since this means a generator is a single (callable) value, it's much easier to pass them around, manipulate them, store them, etc.
 
 For documentation see [here][docs].
+The tests (in `genny_spec.lua`) can be run using [busted][].
 
 [docs]: https://docs.bartbes.com/genny
+[busted]: https://olivinelabs.com/busted/
