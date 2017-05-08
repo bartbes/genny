@@ -126,6 +126,26 @@ describe("The standard generator", function()
 
 			assert.are.same(target, output)
 		end)
+
+		it("has an optional step argument", function()
+			local target = {1, 3, 5}
+			local output = {}
+
+			for n in genny.range(1, 5, 2) do
+				table.insert(output, n)
+			end
+
+			assert.are.same(target, output)
+
+			local target = {5, 4, 3, 2, 1}
+			local output = {}
+
+			for n in genny.range(5, 1, -1) do
+				table.insert(output, n)
+			end
+
+			assert.are.same(target, output)
+		end)
 	end)
 
 	describe("gmatch", function()

@@ -62,20 +62,20 @@ function genny.pairs(t)
 	return genny.generator(pairs(t))
 end
 
-local function rangeit(to, prev)
-	prev = prev + 1
-	if prev > to then
-		prev = nil
-	end
-	return prev
-end
-
--- All numbers from from up to and including to
-function genny.range(from, to)
+-- All numbers from from up to and including to, with an optional step
+function genny.range(from, to, step)
+	step = step or 1
 	if not to then
 		from, to = 1, from
 	end
-	return genny.generator(rangeit, to, from-1)
+	local it = from-step
+	return function()
+		if it == to then
+			return nil
+		end
+		it = it+step
+		return it
+	end
 end
 
 function genny.gmatch(string, pattern)
