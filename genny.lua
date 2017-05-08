@@ -48,6 +48,16 @@ function genny.ipairs(t)
 	return genny.generator(ipairs(t))
 end
 
+function genny.ripairs(t)
+	local i = #t+1
+	return function()
+		i = i - 1
+		if i == 0 then return nil end
+		local v = t[i]
+		return i,v
+	end
+end
+
 function genny.pairs(t)
 	return genny.generator(pairs(t))
 end

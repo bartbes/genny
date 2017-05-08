@@ -49,6 +49,25 @@ describe("The standard generator", function()
 		end)
 	end)
 
+	describe("ripairs", function()
+		it("is the reverse of generator(ipairs)", function()
+			local t = {1, 2, 3, 4, 5}
+
+			local ipairs_output = {}
+			local gen_output = {}
+
+			for i, v in genny.ripairs(t) do
+				table.insert(ipairs_output, {i, v})
+			end
+
+			for i, v in genny.generator(ipairs(t)) do
+				table.insert(gen_output, 1, {i, v})
+			end
+
+			assert.are.same(ipairs_output, gen_output)
+		end)
+	end)
+
 	describe("pairs", function()
 		it("matches generator(pairs)", function()
 			local t = {a = 5, b = 7, cake = "a"}
