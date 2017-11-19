@@ -114,6 +114,16 @@ function genny.once(value)
 	end
 end
 
+-- Return each of the arguments
+function genny.varargs(...)
+	local args = {...}
+	local pos = 0
+	return function()
+		pos = pos+1
+		return args[pos]
+	end
+end
+
 ---- Combinators ----
 -- First return all values from first, then from second, etc
 function genny.join(first, ...)
@@ -245,6 +255,15 @@ function genny.fold(gen, init, func)
 	end
 	return state
 end
+
+-- Return all (first) elements as return values
+local function genny_unpack(gen)
+	local value = gen()
+	if value then
+		return value, genny_unpack(gen)
+	end
+end
+genny.unpack = genny_unpack
 
 ---- Utilities ----
 local chain_mt = {

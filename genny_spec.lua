@@ -254,6 +254,30 @@ describe("The standard generator", function()
 			assert.are.same(target, output)
 		end)
 	end)
+
+	describe("varargs", function()
+		it("returns all of the arguments in order", function()
+			local target = {1, 2, 3}
+			local output = {}
+
+			for i in genny.varargs(1, 2, 3) do
+				table.insert(output, i)
+			end
+
+			assert.are.same(target, output)
+		end)
+
+		it("stops on the first nil", function()
+			local target = {1, 2}
+			local output = {}
+
+			for i in genny.varargs(1, 2, nil, 4) do
+				table.insert(output, i)
+			end
+
+			assert.are.same(target, output)
+		end)
+	end)
 end)
 
 describe("The combinator", function()
@@ -759,6 +783,23 @@ describe("The collector", function()
 
 			local output = genny.fold(genny.ipairs(t), 0, f)
 			assert.is.equal(target, output)
+		end)
+	end)
+
+	describe("unpack", function()
+		it("returns all values", function()
+			local target = {1, 2, 3}
+
+			local output = {genny.unpack(genny.varargs(1, 2, 3))}
+			assert.are.same(target, output)
+		end)
+
+		it("returns only the first result of an iteration", function()
+			local t = {'a', 'b', 'c'}
+			local target = {1, 2, 3}
+
+			local output = {genny.unpack(genny.ipairs(t))}
+			assert.are.same(target, output)
 		end)
 	end)
 end)
