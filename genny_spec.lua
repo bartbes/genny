@@ -277,6 +277,16 @@ describe("The standard generator", function()
 
 			assert.are.same(target, output)
 		end)
+
+		it("handles no arguments", function()
+			local ran = 0
+
+			for _ in genny.varargs() do
+				ran = ran + 1
+			end
+
+			assert.is.equal(ran, 0)
+		end)
 	end)
 end)
 
