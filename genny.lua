@@ -36,10 +36,14 @@ local genny =
 -- Turns a lua iterator into a generator
 function genny.generator(it, state, init)
 	return function()
-		-- NOTE: If the iterator has more than 26(!) return values, they will be discarded
-		local a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t, u, v, w, x, y, z = it(state, init)
-		init = a
-		return a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t, u, v, w, x, y, z
+		local ret = { it(state, init) }
+		init = ret[1]
+
+		if table.unpack then
+			return table.unpack(ret) -- Lua 5.2 or newer
+		else
+			return unpack(ret) -- Lua 5.1
+		end
 	end
 end
 
